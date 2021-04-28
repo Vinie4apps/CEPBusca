@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun jsonParse(str: Editable) {
+        textView.text = " "
         val url = "https://viacep.com.br/ws/$str/json/"
         val request = JsonObjectRequest(Request.Method.GET, url, null, { response ->
             try {
@@ -55,11 +56,12 @@ class MainActivity : AppCompatActivity() {
                 val ddd = response.getString("ddd")
                 val siafi = response.getString("siafi")
 
-                textView.append("Logradouro: $log\nBairro: $bairro\nComplemento: $complemento\nLocal: $local\nUF: $uf\nIBGE: $ibge\nDDD: $ddd\nSIAFI: $siafi")
+                textView.append("Logradouro: $log\n Bairro: $bairro\n Complemento: $complemento\n Local: $local\n UF: $uf\n IBGE: $ibge\n DDD: $ddd\n SIAFI: $siafi")
 
 
             } catch (e: JSONException) {
                 e.printStackTrace()
+                textView.append("CEP não encontrado :(")
             }
         }, { error -> error.printStackTrace() })
         requestQueue?.add(request)
