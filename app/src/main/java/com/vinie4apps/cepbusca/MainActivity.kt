@@ -12,19 +12,29 @@ import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import org.json.JSONException
 
 
-var requestQueue: RequestQueue? = null
+private lateinit var requestQueue: RequestQueue
 @SuppressLint("StaticFieldLeak")
-lateinit var textView: TextView
+private lateinit var textView: TextView
 private lateinit var textUF: String
+lateinit var mAdView : AdView
 
-
-class BuscacepActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        MobileAds.initialize(this) {}
+
+        mAdView = findViewById(R.id.adView)
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
+
 
         requestQueue = Volley.newRequestQueue(this)
 
@@ -55,6 +65,7 @@ class BuscacepActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
             jsonParseEND(strcidade, strend)
 
         }
+
         val spinner = findViewById<Spinner>(R.id.uf)
         val adapter = ArrayAdapter.createFromResource(
             this,
@@ -95,7 +106,7 @@ class BuscacepActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 textView.append("CEP não encontrado :(")
             }
         }, { error -> error.printStackTrace() })
-        requestQueue?.add(request)
+        requestQueue.add(request)
     }
     private fun jsonParseEND(cidade: Editable, end: Editable) {
         textView.text = " "
@@ -116,6 +127,6 @@ class BuscacepActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                 textView.append("CEP não encontrado :(")
             }
         }, { error -> error.printStackTrace() })
-        requestQueue?.add(request)
+        requestQueue.add(request)
     }
 }
